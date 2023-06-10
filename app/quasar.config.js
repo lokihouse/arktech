@@ -39,6 +39,7 @@ module.exports = configure((/* ctx */) => ({
   // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
   css: [
     'app.scss',
+    'tailwind.css'
   ],
 
   // https://github.com/quasarframework/quasar/tree/dev/extras
@@ -117,7 +118,18 @@ module.exports = configure((/* ctx */) => ({
     // directives: [],
 
     // Quasar plugins
-    plugins: [],
+    plugins: [
+      'AddressbarColor',
+      'AppFullscreen',
+      'Cookies',
+      'Dark',
+      'Dialog',
+      'Loading',
+      'LoadingBar',
+      'LocalStorage',
+      'Notify',
+      'Screen',
+    ],
   },
 
   // animations: 'all', // --- includes all animations
