@@ -32,6 +32,10 @@
           @submit.prevent="onSubmitForm"
         >
           <input-text-component
+            v-model="form.fullname"
+            label="FULL_NAME"
+          />
+          <input-text-component
             v-model="form.email"
             label="EMAIL"
           />
@@ -41,12 +45,12 @@
           />
           <button-component
             type="submit"
-            label="SIGN_IN"
+            label="SIGN_UP"
             primary
           />
           <button-component
-            :to="{name: 'register'}"
-            label="REGISTER"
+            :to="{name: 'login'}"
+            label="GO_BACK"
             flat
             primary
           />
@@ -61,36 +65,29 @@ import ButtonComponent from 'src/components/ButtonComponent.vue';
 import InputPasswordComponent from 'src/components/InputPasswordComponent.vue';
 import InputTextComponent from 'src/components/InputTextComponent.vue';
 import { ref, reactive } from 'vue';
-import { useQuasar } from 'quasar';
-import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../stores/AuthStore';
 
 const router = useRouter();
-const authStore = useAuthStore();
-const $q = useQuasar();
-const { t } = useI18n();
+const AuthStore = useAuthStore();
 
 const formIsLoading = ref(false);
 
 const form = reactive({
+  fullname: 'Carlos Barreto',
   email: 'carlosbarreto.eng@gmail.com',
   password: 'carlos',
 });
 
-const onSubmitForm = async () => {
+const onSubmitForm = () => {
   try {
     formIsLoading.value = true;
-    await authStore.logIn(form.email, form.password);
-    router.push({ name: 'dashboard' });
+    AuthStore.createUser(form.fullname, form.email, form.password)
+      .then(() => {
+        router.push({ name: 'verify_email' });
+      });
   } catch (error) {
-    form.email = '';
-    form.password = '';
     console.log(error);
-    $q.notify({
-      type: 'negative',
-      message: t('ERROR.LOGIN_FAILURE'),
-    });
   } finally {
     formIsLoading.value = false;
   }

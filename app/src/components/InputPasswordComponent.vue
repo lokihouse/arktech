@@ -1,12 +1,13 @@
 <template>
   <q-input
-    outlined
     v-model="parsedPassword"
+    outlined
     bg-color="white"
     class="q-mb-sm"
     :type="isPwd ? 'password' : 'text'"
-    :label="$t(label)">
-    <template v-slot:append>
+    :label="$t(label)"
+  >
+    <template #append>
       <q-icon
         :name="isPwd ? 'visibility_off' : 'visibility'"
         class="cursor-pointer"
@@ -24,7 +25,10 @@ const props = defineProps({
     type: String,
     default: 'password',
   },
-  password: String,
+  password: {
+    type: String,
+    default: '',
+  },
 });
 
 const parsedPassword = props.password ?? '';

@@ -1,10 +1,23 @@
 import { RouteRecordRaw } from 'vue-router';
 
+import authRoute from './authRoute';
+
 const routes: RouteRecordRaw[] = [
+  { path: '/', redirect: '/auth/login' },
+  authRoute,
   {
-    path: '/',
-    component: () => import('layouts/WrapperLayout.vue'),
-    children: [{ path: '', component: () => import('pages/Auth/LoginPage.vue') }],
+    path: '/admin',
+    component: () => import('layouts/MainLayout.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'dashboard',
+        component: () => import('pages/DashboardPage.vue'),
+      },
+    ],
   },
 ];
 

@@ -1,18 +1,52 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hhh Lpr lFf">
     <q-header>
       <q-toolbar>
+        <q-btn
+          flat
+          round
+          dense
+          icon="menu"
+          @click="toggleDrawer"
+        />
         <q-toolbar-title>
-          ArkTech
+          <LogoHorizontalComponent />
         </q-toolbar-title>
+        <button @click="logout">
+          OUT
+        </button>
       </q-toolbar>
     </q-header>
 
     <q-drawer
-      v-model="leftDrawerOpen"
+      v-model="drawer"
       show-if-above
+
+      :mini="miniState"
+
+      :width="calculateDrawerWidth"
+      :breakpoint="500"
       bordered
+
+      @mouseover="miniState = false"
+      @mouseout="miniState = true"
     >
+      <q-scroll-area class="fit">
+        <q-list padding>
+          <q-item
+            v-ripple
+            clickable
+          >
+            <q-item-section avatar>
+              <q-icon name="inbox" />
+            </q-item-section>
+
+            <q-item-section>
+              Inbox
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-scroll-area>
     </q-drawer>
 
     <q-page-container>
@@ -21,26 +55,36 @@
   </q-layout>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script setup lang="ts">
+import { useAuthStore } from 'src/stores/AuthStore';
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { dom } from 'quasar';
 
-const linksList: never[] = [];
+import LogoHorizontalComponent from '../components/LogoHorizontalComponent.vue';
 
-export default defineComponent({
-  name: 'MainLayout',
+const authStore = useAuthStore();
+const router = useRouter();
 
-  components: {},
+const drawer = ref(false);
+const miniState = ref(true);
 
-  setup() {
-    const leftDrawerOpen = ref(false);
+const setDrawer = (state: boolean) => {
+  drawer.value = state;
+};
 
-    return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value;
-      },
-    };
-  },
+const toggleDrawer = () => setDrawer(!drawer.value);
+
+const calculateDrawerWidth = computed(() => {
+  const DomElement = document.getElementById('bodyApp') as Element;
+  console.log();
+  return dom.width(DomElement) < 500 ? dom.width(DomElement) : 200;
 });
+
+const logout = () => {
+  authStore.logOut().then((value: unknown) => {
+    console.log('tudo certinho', value);
+    router.push({ name: 'login' });
+  });
+};
 </script>

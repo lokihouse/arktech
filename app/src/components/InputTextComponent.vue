@@ -1,10 +1,22 @@
 <template>
-  <q-input outlined v-model="parsedText" :label="$t(label)" class="q-mb-sm" />
+  <q-input
+    v-model="parsedText"
+    outlined
+    bg-color="white"
+    :label="$t(label)"
+    class="q-mb-sm"
+  />
 </template>
 <script setup lang="ts">
 const props = defineProps({
-  label: String,
-  text: String,
+  label: {
+    type: String,
+    default: 'label',
+  },
+  text: {
+    type: String,
+    default: 'text',
+  },
 });
 
 const parsedText = props.text ?? '';
